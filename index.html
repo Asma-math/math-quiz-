@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الفصل الأول: القيمة المنزلية - الصف الثالث الابتدائي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0e7ff 0%, #fef3c7 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            position: relative;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .quiz-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .quiz-header h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .quiz-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .teacher-badge {
+            margin-top: 10px;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Screens */
+        .screen {
+            padding: 30px;
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            text-align: center;
+        }
+
+        .welcome-screen img.school-logo {
+            max-width: 120px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-screen h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .welcome-screen p {
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: right;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+        }
+
+        /* Buttons */
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px -2px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Quiz Progress & Question Screen */
+        .quiz-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+        }
+
+        .question-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Options list */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .option-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 15px 20px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option-item:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .option-item input[type="radio"] {
+            accent-color: var(--primary);
+            width: 20px;
+            height: 20px;
+        }
+
+        .option-item.selected {
+            background: #e0e7ff;
+            border-color: var(--primary);
+            color: #312e81;
+            font-weight: 600;
+        }
+
+        .option-item.correct {
+            background: #d1fae5 !important;
+            border-color: var(--success) !important;
+            color: #065f46;
+        }
+
+        .option-item.incorrect {
+            background: #fee2e2 !important;
+            border-color: var(--danger) !important;
+            color: #991b1b;
+        }
+
+        /* Ordering Question Special Style */
+        .order-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .order-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f1f5f9;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .order-inputs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .order-inputs input {
+            width: 70px;
+            padding: 8px;
+            text-align: center;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        /* Feedback box */
+        .feedback-box {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback-box.correct-fb {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .feedback-box.incorrect-fb {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        .quiz-footer-nav {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* Result Screen & Certificate */
+        .result-screen {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .result-screen h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .score-summary {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .certificate {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 4px solid var(--accent);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 20px 0;
+            position: relative;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .certificate h3 {
+            font-size: 1.6rem;
+            color: #b45309;
+            margin-bottom: 15px;
+        }
+
+        .certificate p {
+            font-size: 1.1rem;
+            color: #78350f;
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        .student-name-display {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 10px 0;
+            border-bottom: 2px dashed var(--accent);
+            display: inline-block;
+            padding: 0 20px;
+        }
+
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn-secondary {
+            background: #64748b;
+        }
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+            body {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="quiz-header">
+            <h1>اختبار الفصل الأول: القيمة المنزلية</h1>
+            <p>الصف الثالث الابتدائي - المادة: رياضيات</p>
+            <div class="teacher-badge">معلمة المادة: أسماء آل عثمان</div>
+        </div>
+
+        <!-- 1. Welcome Screen -->
+        <div id="welcomeScreen" class="screen active welcome-screen">
+            <h2>أهلاً بكِ يا بطلة الرياضيات!</h2>
+            <p>اختبري معلوماتكِ في درس القيمة المنزلية بكل حماس وتألق.</p>
+            
+            <div class="form-group">
+                <label for="studentName">الاسم الكريم:</label>
+                <input type="text" id="studentName" placeholder="اكتبي اسمك الثلاثي هنا..." autocomplete="off">
+            </div>
+
+            <button class="btn" id="startBtn" onclick="startQuiz()">ابدئي الاختبار</button>
+        </div>
+
+        <!-- 2. Quiz Question Screen -->
+        <div id="quizScreen" class="screen">
+            <div class="quiz-top-bar">
+                <span id="questionCounter">السؤال ١ من ٩</span>
+                <span id="scoreTracker">الدرجة: ٠</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-title" id="questionText">نص السؤال سيظهر هنا</div>
+                
+                <!-- Options container for multiple choice -->
+                <div class="options-list" id="optionsList"></div>
+
+                <!-- Special container for ordering question -->
+                <div id="orderingContainer" style="display: none;">
+                    <div class="order-container" id="orderItemsList"></div>
+                </div>
+
+                <div class="feedback-box" id="feedbackBox"></div>
+            </div>
+
+            <div class="quiz-footer-nav">
+                <button class="btn" id="nextBtn" onclick="handleNextQuestion()" disabled>السؤال التالي</button>
+            </div>
+        </div>
+
+        <!-- 3. Result & Certificate Screen -->
+        <div id="resultScreen" class="screen result-screen">
+            <h2>🎉 انتهى الاختبار بنجاح! 🎉</h2>
+            <div class="score-summary" id="scoreSummaryText">لقد حصلتِ على 0 من 9</div>
+
+            <div class="certificate">
+                <h3>✨ شهادة تقدير وإنجاز ✨</h3>
+                <p>تمنح هذه الشهادة المتميزة للطالبة المتألقة:</p>
+                <div class="student-name-display" id="certStudentName">اسم الطالبة</div>
+                <p>وذلك لإتمامها اختبار "القيمة المنزلية" بكل تفوق واقتدار بنسبة نجاح <span id="certPercentage">٠٪</span>.</p>
+                <p style="margin-top: 15px; font-weight: 700; color: #b45309;">معلمة المادة: أسماء آل عثمان</p>
+            </div>
+
+            <div class="result-actions">
+                <button class="btn" onclick="restartQuiz()">إعادة الاختبار</button>
+                <button class="btn btn-secondary" onclick="window.print()">طباعة الشهادة</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Data extracted directly from the official PDF document
+        const quizData = [
+            {
+                id: 1,
+                type: "mcq",
+                question: "السؤال الأول: حدد النمط، ثم جد العدد التالي: ١٥ ، ٢٥ ، ٣٥ ، ٤٥ ، ( ؟ )",
+                options: [
+                    { text: "٤٨", isCorrect: false, rationale: "النمط يزداد بمقدار ١٠ في كل مرة، وليس ٤٨." },
+                    { text: "٥٠", isCorrect: true, rationale: "ممتازة! النمط يزداد بمقدار ١٠ في كل مرة (١٥، ٢٥، ٣٥، ٤٥، ٥٠)." },
+                    { text: "٥٥", isCorrect: false, rationale: "زيادة بمقدار ١٠ تجعل العدد ٥٠ وليس ٥٥." }
+                ],
+                hint: "لاحظي كم تزيد الأعداد في كل مرة!"
+            },
+            {
+                id: 2,
+                type: "mcq",
+                question: "قرأت ليلى صفحات في أيام متتالية على النمط: ٣ ، ٦ ، ٩ ، ١٢ ، ١٥ ، ... فكم صفحة ستقرأها يوم الخميس؟",
+                options: [
+                    { text: "١٥", isCorrect: false, rationale: "١٥ هي صفحة يوم الأربعاء، والخميس يأتي بعدها." },
+                    { text: "١٨", isCorrect: true, rationale: "رائع! النمط يزيد بمقدار ٣، إذن بعد ١٥ تكون الإجابة ١٨." },
+                    { text: "٢٤", isCorrect: false, rationale: "الزيادة ثابتة بمقدار ٣ وليست ٩." }
+                ],
+                hint: "النمط عبارة عن جدول ضرب العدد ٣ أو إضافة ٣ في كل مرة."
+            },
+            {
+                id: 3,
+                type: "mcq",
+                question: "ما القيمة المنزلية للرقم الذي تحته خط في العدد <u>٢</u>٣١٢ ؟",
+                options: [
+                    { text: "٢", isCorrect: false, rationale: "القيمة المنزلية للرقم ٢ في منزلة الألوف وليست آحاد." },
+                    { text: "٢٠٠", isCorrect: false, rationale: "القيمة المنزلية في منزلة المئات هي ٢٠٠، ولكن الرقم هنا في الألوف." },
+                    { text: "٢٠٠٠", isCorrect: true, rationale: "صحيح! الرقم ٢ يقع في منزلة آحاد الألوف وقيمته المنزلية تساوي ٢٠٠٠." }
+                ],
+                hint: "انظري إلى أي منزلة ينتمي الرقم ٢ (آحاد، عشرات، مئات، أم ألوف؟)."
+            },
+            {
+                id: 4,
+                type: "mcq",
+                question: "ما هي الصيغة القياسية للعدد ٦ + ٥٠ + ٨٠٠ ؟",
+                options: [
+                    { text: "٨٦٥", isCorrect: false, rationale: "٨٦٥ تعني ٥ + ٦٠ + ٨٠٠ وليست الإجابة المطلوبة." },
+                    { text: "٨٥٦", isCorrect: true, rationale: "ممتازة! ٨ مئات (٨٠٠) و٥ عشرات (٥٠) و٦ آحاد (٦) تصبح ٨٥٦." },
+                    { text: "٦٥٨", isCorrect: false, rationale: "ترتيب المنازل خاطئ، الآحاد ٦ والمئات ٨." }
+                ],
+                hint: "اجمعي القيم بحسب منازلها: الآحاد ثم العشرات ثم المئات."
+            },
+            {
+                id: 5,
+                type: "mcq",
+                question: "اسم منزلة الرقم الذي تحته خط في العدد ٥٣٤<u>٥</u>٦ هو:",
+                options: [
+                    { text: "آحاد الألوف", isCorrect: false, rationale: "آحاد الألوف هو الرقم ٣." },
+                    { text: "مئات", isCorrect: false, rationale: "المئات هو الرقم ٤." },
+                    { text: "عشرات الألوف", isCorrect: true, rationale: "أحسنتِ! الرقم ٥ تحته خط ويقع في منزلة عشرات الألوف." }
+                ],
+                hint: "عدّي المنازل من اليمين: آحاد، عشرات، مئات، آحاد الألوف، ثم عشرات الألوف."
+            },
+            {
+                id: 6,
+                type: "mcq",
+                question: "ما هي الصيغة القياسية للعدد ( اثنان وثلاثون ألفاً وخمسة وعشرون ) ؟",
+                options: [
+                    { text: "٢٥٣٢٠", isCorrect: false, rationale: "هذا العدد هو خمسة وعشرون ألفاً وثلاثمائة وعشرون." },
+                    { text: "٧٦٥", isCorrect: false, rationale: "هذا عدد صغير جداً لا يمثل الألوف." },
+                    { text: "٣٢٠٢٥", isCorrect: true, rationale: "رائع! اثنان وثلاثون ألفاً (٣٢٠٠٠) وخمسة وعشرون (٢٥) تُكتب ٣٢٠٢٥." }
+                ],
+                hint: "اكتبي خانة الألوف أولاً (٣٢) ثم خانة المئات (صفر) ثم الآحاد والعشرات (٢٥)."
+            },
+            {
+                id: 7,
+                type: "mcq",
+                question: "اكتشف الخطأ: كتب خالد ومعاذ العدد ٢٠١٣ بالصيغة اللفظية كالتالي: خالد كتب (مئتان وثلاثة عشر) ومعاذ كتب (ألفان وثلاثة عشر). من على حق؟",
+                options: [
+                    { text: "خالد؛ لأن ٢٠١٣ = مئتان وثلاثة عشر.", isCorrect: false, rationale: "خالد أخطأ لأن العدد يحتوي على ألفين وليست مئتين." },
+                    { text: "معاذ؛ لأن ٢٠١٣ = ألفان وثلاثة عشر.", isCorrect: true, rationale: "ممتازة! معاذ على حق لأن الرقم ٢ في خانة آحاد الألوف فيكون ألفان وثلاثة عشر." }
+                ],
+                hint: "انظري إلى خانة الألوف في العدد ٢٠١٣."
+            },
+            {
+                id: 8,
+                type: "ordering",
+                question: "السؤال الثاني: رتبي الأعداد التالية من الأكبر إلى الأصغر: ٢٣١ ، ١٣٦ ، ١٧٨",
+                items: ["٢٣١", "١٣٦", "١٧٨"],
+                correctOrder: [231, 178, 136],
+                rationale: "أكبر عدد هو ٢٣١، يليه ١٧٨، وأصغرها ١٣٦."
+            },
+            {
+                id: 9,
+                type: "rounding",
+                question: "السؤال الثالث: التقريب:\n١. قربي العدد ٦٨٢ إلى أقرب مئة.\n٢. قربي العدد ٣٠٤٩ إلى أقرب ألف.",
+                options: [
+                    { text: "٧٠٠ و ٣٠٠٠", isCorrect: true, rationale: "صحيح! ٦٨٢ مقرباً لأقرب مئة هو ٧٠٠، و٣٠٤٩ مقرباً لأقرب ألف هو ٣٠٠٠." },
+                    { text: "٦٠٠ و ٤٠٠٠", isCorrect: false, rationale: "التقريب الخاطئ؛ ٨ في العشرات تقرب الـ ٦ إلى ٧، و٤ في المئات تبقي الـ ٣ كما هي ٣٠٠٠." }
+                ],
+                hint: "انظري إلى الرقم عن يمين منزلة التقريب لتحددي ما إذا كنتِ ستضيفين واحداً أو تبقين العدد."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let studentName = "";
+        let userAnswers = {};
+
+        function startQuiz() {
+            const nameInput = document.getElementById("studentName");
+            studentName = nameInput.value.trim();
+
+            if (!studentName) {
+                alert("الرجاء كتابة اسم الطالبة قبل البدء في الاختبار!");
+                nameInput.focus();
+                return;
+            }
+
+            document.getElementById("welcomeScreen").classList.remove("active");
+            document.getElementById("quizScreen").classList.add("active");
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = quizData[currentQuestionIndex];
+            
+            // Update counter and progress bar
+            document.getElementById("questionCounter").innerText = `السؤال ${convertToArabicDigits(currentQuestionIndex + 1)} من ${convertToArabicDigits(quizData.length)}`;
+            document.getElementById("scoreTracker").innerText = `الدرجة: ${convertToArabicDigits(score)}`;
+            
+            const progressPercent = ((currentQuestionIndex) / quizData.length) * 100;
+            document.getElementById("progressBarFill").style.width = `${progressPercent}%`;
+
+            document.getElementById("questionText").innerText = q.question;
+            
+            const optionsList = document.getElementById("optionsList");
+            const orderingContainer = document.getElementById("orderingContainer");
+            const feedbackBox = document.getElementById("feedbackBox");
+            const nextBtn = document.getElementById("nextBtn");
+
+            optionsList.innerHTML = "";
+            orderingContainer.style.display = "none";
+            optionsList.style.display = "flex";
+            feedbackBox.style.display = "none";
+            nextBtn.disabled = true;
+
+            if (q.type === "mcq" || q.type === "rounding") {
+                q.options.forEach((opt, index) => {
+                    const item = document.createElement("div");
+                    item.className = "option-item";
+                    item.innerHTML = `
+                        <input type="radio" name="quizOption" id="opt_${index}" value="${index}">
+                        <label for="opt_${index}" style="cursor: pointer; width: 100%;">${opt.text}</label>
+                    `;
+                    item.onclick = () => selectOption(index);
+                    optionsList.appendChild(item);
+                });
+            } else if (q.type === "ordering") {
+                optionsList.style.display = "none";
+                orderingContainer.style.display = "block";
+                
+                const orderItemsList = document.getElementById("orderItemsList");
+                orderItemsList.innerHTML = `
+                    <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 10px;">ضعي أرقام الترتيب (١ للأكبر، ٢ للوسط، ٣ للأصغر) أمام كل عدد:</p>
+                `;
+                
+                q.items.forEach((numText, idx) => {
+                    const row = document.createElement("div");
+                    row.className = "order-item-row";
+                    row.innerHTML = `
+                        <span>العدد: ${numText}</span>
+                        <div class="order-inputs">
+                            <input type="number" min="1" max="3" class="order-rank-input" data-index="${idx}" placeholder="الترتيب">
+                        </div>
+                    `;
+                    orderItemsList.appendChild(row);
+                });
+
+                // Enable next button when ordering inputs have values
+                const inputs = orderItemsList.querySelectorAll('.order-rank-input');
+                inputs.forEach(input => {
+                    input.oninput = () => {
+                        let allFilled = Array.from(inputs).every(inp => inp.value !== "");
+                        nextBtn.disabled = !allFilled;
+                    };
+                });
+            }
+        }
+
+        function selectOption(index) {
+            const items = document.querySelectorAll(".option-item");
+            items.forEach((item, idx) => {
+                item.classList.remove("selected");
+                if (idx === index) {
+                    item.classList.add("selected");
+                    item.querySelector("input").checked = true;
+                }
+            });
+            document.getElementById("nextBtn").disabled = false;
+        }
+
+        function handleNextQuestion() {
+            const q = quizData[currentQuestionIndex];
+            const feedbackBox = document.getElementById("feedbackBox");
+            const nextBtn = document.getElementById("nextBtn");
+
+            let isCorrect = false;
+
+            if (q.type === "mcq" || q.type === "rounding") {
+                const selectedRadio = document.querySelector('input[name="quizOption"]:checked');
+                if (!selectedRadio && !nextBtn.disabled) return;
+                
+                const selectedIdx = parseInt(selectedRadio.value);
+                const chosenOption = q.options[selectedIdx];
+                isCorrect = chosenOption.isCorrect;
+
+                // Disable options and show colors
+                const items = document.querySelectorAll(".option-item");
+                items.forEach((item, idx) => {
+                    item.onclick = null;
+                    if (q.options[idx].isCorrect) {
+                        item.classList.add("correct");
+                    } else if (idx === selectedIdx && !chosenOption.isCorrect) {
+                        item.classList.add("incorrect");
+                    }
+                });
+
+                feedbackBox.className = "feedback-box " + (isCorrect ? "correct-fb" : "incorrect-fb");
+                feedbackBox.innerHTML = isCorrect ? `✨ أحسنتِ الإجابة صحيحة! ${chosenOption.rationale}` : `💡 تذكّري: ${chosenOption.rationale}`;
+                feedbackBox.style.display = "block";
+
+            } else if (q.type === "ordering") {
+                const inputs = document.querySelectorAll('.order-rank-input');
+                const userEnteredRanks = Array.from(inputs).map(inp => parseInt(inp.value));
+                
+                // Correct order for [231, 136, 178] descending is [231, 178, 136] -> ranks should be 1, 3, 2
+                // Let's verify user mapping against q.correctOrder
+                const sortedCorrect = [...q.correctOrder].sort((a,b) => b - a); // [231, 178, 136]
+                
+                let userArrangement = [];
+                inputs.forEach(inp => {
+                    const originalIdx = parseInt(inp.dataset.index);
+                    userArrangement.push({ rank: parseInt(inp.value), val: parseInt(q.items[originalIdx]) });
+                });
+                
+                userArrangement.sort((a, b) => a.rank - b.rank);
+                const userValuesSorted = userArrangement.map(item => item.val);
+                
+                isCorrect = JSON.stringify(userValuesSorted) === JSON.stringify(sortedCorrect);
+
+                feedbackBox.className = "feedback-box " + (isCorrect ? "correct-fb" : "incorrect-fb");
+                feedbackBox.innerHTML = isCorrect ? `✨ أحسنتِ الإجابة صحيحة! ${q.rationale}` : `💡 حاولي التركيز: ${q.rationale}`;
+                feedbackBox.style.display = "block";
+                
+                inputs.forEach(inp => inp.disabled = true);
+            }
+
+            if (isCorrect) {
+                score++;
+            }
+
+            // Change button behavior to move forward or show results
+            nextBtn.innerText = currentQuestionIndex < quizData.length - 1 ? "السؤال التالي" : "عرض النتيجة النهائية";
+            nextBtn.onclick = proceedToNext;
+        }
+
+        function proceedToNext() {
+            currentQuestionIndex++;
+            const nextBtn = document.getElementById("nextBtn");
+            nextBtn.innerText = "السؤال التالي";
+            nextBtn.onclick = handleNextQuestion;
+
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById("quizScreen").classList.remove("active");
+            document.getElementById("resultScreen").classList.add("active");
+
+            document.getElementById("scoreSummaryText").innerText = `لقد حصلتِ على ${convertToArabicDigits(score)} من ${convertToArabicDigits(quizData.length)}`;
+            document.getElementById("certStudentName").innerText = studentName;
+            
+            const percentage = Math.round((score / quizData.length) * 100);
+            document.getElementById("certPercentage").innerText = convertToArabicDigits(percentage) + "٪";
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById("resultScreen").classList.remove("active");
+            document.getElementById("welcomeScreen").classList.add("active");
+            document.getElementById("studentName").value = "";
+        }
+
+        function convertToArabicDigits(num) {
+            const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+            return num.toString().replace(/\d/g, x => arabicDigits[x]);
+        }
+    </script>
+</body>
+</html>
+```eof
+
+---
+
+### هيكل المجلدات النهائي (Folder Structure)
+
+```text
+math-quiz-project/
+├── index.html
+└── assets/
+    └── (أية صور فرعية إن وجدت أو ملفات مساعدة)
